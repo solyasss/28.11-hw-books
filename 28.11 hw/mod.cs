@@ -3,9 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace authors_and_books
+namespace hw
 {
-    public class mod
+    public class mod : i_model
     {
         private XElement xml_data;
         private string file_path = "data.xml";

@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace authors_and_books
+namespace hw
 {
     public interface i_view
     {
-        void update_authors(System.Collections.Generic.List<string> authors);
-        void update_books(System.Collections.Generic.List<string> books);
+        void update_authors(List<string> authors);
+        void update_books(List<string> books);
         string selected_author { get; }
         string selected_book { get; }
         bool is_filter_enabled { get; }
         void show_message(string message, string caption = "Info");
         bool show_confirm(string message, string caption);
-
         string show_input_dialog(string text, string caption);
+        string show_open_file_dialog(string filter);
+        string show_save_file_dialog(string filter);
+        void close_view();
 
         event EventHandler author_selected;
         event EventHandler filter_changed;

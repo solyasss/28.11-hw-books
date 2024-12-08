@@ -1,16 +1,24 @@
 using System;
 using System.Windows.Forms;
 
-namespace authors_and_books
+namespace hw
 {
-    static class Program
+    static class program
     {
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new form1());
+
+            i_model model = new mod();
+            i_view view = new form1();
+
+            presenter presenter = new presenter(view, model);
+
+            presenter.initialize();
+
+            Application.Run((Form)view);
         }
     }
 }

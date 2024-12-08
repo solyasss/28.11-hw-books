@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace authors_and_books
+namespace hw
 {
     public partial class form1 : Form, i_view
     {
@@ -19,11 +18,10 @@ namespace authors_and_books
         public event EventHandler save_clicked = delegate { };
         public event EventHandler exit_clicked = delegate { };
 
-        private presenter presenter;
-
         public form1()
         {
             InitializeComponent();
+
             combo_authors.SelectedIndexChanged += (s, e) => author_selected(this, EventArgs.Empty);
             checkbox_filter.CheckedChanged += (s, e) => filter_changed(this, EventArgs.Empty);
 
@@ -36,9 +34,6 @@ namespace authors_and_books
             menu_open.Click += (s, e) => open_clicked(this, EventArgs.Empty);
             menu_save.Click += (s, e) => save_clicked(this, EventArgs.Empty);
             menu_exit.Click += (s, e) => exit_clicked(this, EventArgs.Empty);
-
-            presenter = new presenter(this);
-            presenter.initialize();
         }
 
         public void update_authors(List<string> authors)
@@ -79,32 +74,60 @@ namespace authors_and_books
             return result == DialogResult.Yes;
         }
 
-        
-            public string show_input_dialog(string text, string caption)
+        public string show_input_dialog(string text, string caption)
+        {
+            using (Form prompt = new Form())
             {
-                using (Form prompt = new Form())
-                {
-                    prompt.Width = 500;
-                    prompt.Height = 150;
-                    prompt.FormBorderStyle = FormBorderStyle.FixedDialog;
-                    prompt.Text = caption;
-                    prompt.StartPosition = FormStartPosition.CenterScreen;
+                prompt.Width = 500;
+                prompt.Height = 150;
+                prompt.FormBorderStyle = FormBorderStyle.FixedDialog;
+                prompt.Text = caption;
+                prompt.StartPosition = FormStartPosition.CenterScreen;
 
-                    Label text_label = new Label() { Left = 50, Top = 20, Text = text, AutoSize = true };
-                    TextBox text_box = new TextBox() { Left = 50, Top = 50, Width = 400 };
-                    Button confirmation = new Button() { Text = "OK", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
+                Label text_label = new Label() { Left = 50, Top = 20, Text = text, AutoSize = true };
+                TextBox text_box = new TextBox() { Left = 50, Top = 50, Width = 400 };
+                Button confirmation = new Button() { Text = "OK", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
 
-                    confirmation.Click += (sender, e) => { prompt.Close(); };
+                confirmation.Click += (sender, e) => { prompt.Close(); };
 
-                    prompt.Controls.Add(text_label);
-                    prompt.Controls.Add(text_box);
-                    prompt.Controls.Add(confirmation);
-                    prompt.AcceptButton = confirmation;
+                prompt.Controls.Add(text_label);
+                prompt.Controls.Add(text_box);
+                prompt.Controls.Add(confirmation);
+                prompt.AcceptButton = confirmation;
 
-                    return prompt.ShowDialog() == DialogResult.OK ? text_box.Text : "";
-                }
+                return prompt.ShowDialog() == DialogResult.OK ? text_box.Text : "";
             }
+        }
 
+        public string show_open_file_dialog(string filter)
+        {
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = filter;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return openFileDialog.FileName;
+                }
+                return null;
+            }
+        }
+
+        public string show_save_file_dialog(string filter)
+        {
+            using (var saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = filter;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return saveFileDialog.FileName;
+                }
+                return null;
+            }
+        }
+
+        public void close_view()
+        {
+            this.Close();
         }
     }
-
+}

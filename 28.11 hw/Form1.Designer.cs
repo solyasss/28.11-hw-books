@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
 
-namespace authors_and_books
+namespace hw
 {
     partial class form1
     {
